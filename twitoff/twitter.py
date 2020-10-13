@@ -15,7 +15,7 @@ TWITTER = tweepy.API(TWITTER_AUTH)
 
 # Load SpaCy pre-trained model
 #nlp = spacy.load('en_core_web_md', disable=['targer','parser'])
-nlp = spacy.load('../spacy_md_model')
+nlp = spacy.load('spacy_md_model')
 
 def vectorize_tweet(nlp, tweet_text):
     '''This function returns the SpaCy embeddings for an input text'''
@@ -30,6 +30,7 @@ def add_user_tweepy(username):
         # Add to User table (or check if existing)
         db_user = (User.query.get(twitter_user.id) or
                    User(id=twitter_user.id,
+
                         username=username,
                         followers=twitter_user.followers_count))
         DB.session.add(db_user)
