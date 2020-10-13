@@ -9,7 +9,7 @@ def create_app():
     '''create and configure instance of our Flask application.'''
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/parent/Desktop/RoseW_Twitoff/twitoff.sqlite3'
-    app.config['SQLALCHEMY_TRACK_NOTIFICATIONS']=False
+    app.config['SQLALCHEMY_TRACK_NOTIFICATIONS'] = False
     DB.init_app(app)#link flask app to SQLAchemy
 
     @app.route('/')
@@ -33,14 +33,14 @@ def create_app():
         
         return render_template('user.html',title=name, tweets=tweets, message=message)
     
-    @app.route('/compare', methods=['POST'])
+    @app.route("/compare", methods=['POST'])
     def compare(message=''):
         user1 = request.values['user1']
         user2 = request.values['user2']
         tweet_text = request.values['tweet_text']
 
         if user1 == user2:
-            message = 'Cannot compare a user to themselves'
+            message = "Cannot compare a user to themselves"
         else:
             prediction = predict_user(user1,user2,tweet_text)
 

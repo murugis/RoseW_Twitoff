@@ -6,6 +6,8 @@ verify_ssl = true
 [dev-packages]
 jupyter = "*"
 matplotlib = "*"
+pylint = "*"
+pylint-flask = "*"
 
 [packages]
 flask = "*"

@@ -15,7 +15,7 @@ TWITTER = tweepy.API(TWITTER_AUTH)
 
 # Load SpaCy pre-trained model
 #nlp = spacy.load('en_core_web_md', disable=['targer','parser'])
-nlp = spacy.load('spacy_md_model')
+nlp = spacy.load('/home/parent/Desktop/RoseW_Twitoff/spacy_md_model')
 
 def vectorize_tweet(nlp, tweet_text):
     '''This function returns the SpaCy embeddings for an input text'''
@@ -30,7 +30,6 @@ def add_user_tweepy(username):
         # Add to User table (or check if existing)
         db_user = (User.query.get(twitter_user.id) or
                    User(id=twitter_user.id,
-
                         username=username,
                         followers=twitter_user.followers_count))
         DB.session.add(db_user)
@@ -105,7 +104,27 @@ def add_user_history(username):
                 break
 
             oldest_max_id = tweets[-1].id - 1
+            tweet_history = []
             tweet_history += tweets 
+
+            
+            # Add newest_tweet_id to the User table
+            if tweets:
+                db_user.newest_tweet_id = tweets[0].id
+
+            # Continue to collect tweets using max_id and update until 3200 tweet max
+            while True:
+                tweets = twitter_user.timeline(count=200,
+                                        exclude_replies=True,
+                                        include_rts=False,
+                                        tweet_mode='extended',
+                                        max_id=oldest_max_id)
+                if len(tweets) == 0:
+                    break
+
+            oldest_max_id = tweets[-1].id - 1
+            tweet_history += tweets 
+    
     
         print(f'Total Tweets collected for {username}: {len(tweet_history)}')
 
